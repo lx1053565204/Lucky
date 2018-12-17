@@ -3,7 +3,7 @@ package com.fk.entitry;
 public class User {
 	private Integer id;
 	private String username;
-	private String password;
+	private String password;  
 	public int getId() {
 		return id;
 	}

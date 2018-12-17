@@ -12,20 +12,23 @@ public class SqlOperation {
 	private Connection conn = null;
 	private PreparedStatement ps = null;
 	private ResultSet rs = null;
-	private boolean isOk=false;
+	private boolean isOk = false;
 
 	/**
 	 * 实现对表的曾刪改操作
+	 * 
 	 * @param sql（预编译的sql语句）
 	 * @param obj（替换占位符的数组）
 	 * @return boolean
 	 */
 	public boolean setSql(String sql, Object[] obj) {
 		try {
-			System.out.println("sql  ："+sql);
+			System.out.println("sql  ：" + sql);
 			System.out.print("Object[]：{");
-			for(Object ob:obj) {
-				System.out.print(ob+"    ");
+			if (obj != null) {
+				for (Object ob : obj) {
+					System.out.print(ob + "    ");
+				}
 			}
 			System.out.print("}");
 			conn = JdbcUtils.getConnection();
@@ -35,9 +38,9 @@ public class SqlOperation {
 					ps.setObject(i + 1, obj[i]);
 				}
 			}
-			int i=ps.executeUpdate();
-			if(i!=0)
-				isOk=true;
+			int i = ps.executeUpdate();
+			if (i != 0)
+				isOk = true;
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -47,18 +50,22 @@ public class SqlOperation {
 		}
 		return isOk;
 	}
+
 	/**
 	 * 返回结果集
+	 * 
 	 * @param sql
 	 * @param obj
 	 * @return
 	 */
 	private ResultSet getResultSet(String sql, Object[] obj) {
 		try {
-			System.out.println("sql  ："+sql);
+			System.out.println("sql  ：" + sql);
 			System.out.print("Object[]：{");
-			for(Object ob:obj) {
-				System.out.print(ob+"    ");
+			if (obj != null) {
+				for (Object ob : obj) {
+					System.out.print(ob + "    ");
+				}
 			}
 			System.out.println("}");
 
@@ -76,8 +83,10 @@ public class SqlOperation {
 		}
 		return rs;
 	}
+
 	/**
 	 * 执行对表的查操作
+	 * 
 	 * @param c（封装类的Class对象）
 	 * @param sql（预编译的sql语句）
 	 * @param obj（替换占位符的数组）
@@ -92,9 +101,11 @@ public class SqlOperation {
 		try {
 			while (rs.next()) {
 				object = c.newInstance();
-				for (int i = 0; i < fields.length; i++) {
-					fields[i].setAccessible(true);
-					fields[i].set(object, rs.getObject(fields[i].getName()));
+				for(Field f:fields) {
+					if(isExistColumn(rs, f.getName())) {
+						f.setAccessible(true);
+						f.set(object, rs.getObject(f.getName()));
+					}
 				}
 				list.add(object);
 			}
@@ -103,5 +114,23 @@ public class SqlOperation {
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+	/**
+	 * 判断结果集中是否有指定的列
+	 * 
+	 * @param rs
+	 * @param columnName
+	 * @return
+	 */
+	public boolean isExistColumn(ResultSet rs, String columnName) {
+		try {
+			if (rs.findColumn(columnName) > 0) {
+				return true;
+			}
+		} catch (SQLException e) {
+			return false;
+		}
+		return false;
 	}
 }

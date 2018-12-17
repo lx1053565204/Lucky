@@ -49,40 +49,40 @@ public class SqlControl {
 	 * 
 	 * @param c 包装类的Class
 	 * @param sql 预编译的sql语句
-	 * @param obj 填充占位符的数组
+	 * @param obj
 	 * @return
 	 */
-	public  List<?> getList(Class c,String sql,Object[] obj){
+	public  List<?> getList(Class c,String sql,Object...obj){
 		list=sqlOperation.getTable(c, sql, obj);
 		return list;
 	}
 	/**
-	 * 预编译sql语句删除
-	 * @param sql 预编译的sql语句
-	 * @param obj 填充占位符的数组
+	 * 预编译语句删除
+	 * @param sql
+	 * @param obj
 	 * @return
 	 */
-	public  boolean delete(String sql, Object[] obj) {
+	public  boolean delete(String sql, Object...obj) {
 		isOk=sqlOperation.setSql(sql, obj);
 		return isOk;
 	}
 	/**
-	 * 预编译sql语句修改
-	 * @param sql 预编译的sql语句
-	 * @param obj 填充占位符的数组
+	 * 预编译语句修改
+	 * @param sql
+	 * @param obj
 	 * @return
 	 */
-	public  boolean update(String sql, Object[] obj) {
+	public  boolean update(String sql, Object...obj) {
 		isOk=sqlOperation.setSql(sql, obj);
 		return isOk;
 	}
 	/**
-	 * 预编译sql语句保存
-	 * @param sql 预编译的sql语句
-	 * @param obj 填充占位符的数组
+	 * 预编译语句保存
+	 * @param sql
+	 * @param obj
 	 * @return
 	 */
-	public  boolean save(String sql, Object[] obj) {
+	public  boolean save(String sql, Object...obj) {
 		isOk=sqlOperation.setSql(sql, obj);
 		return isOk;
 	}
