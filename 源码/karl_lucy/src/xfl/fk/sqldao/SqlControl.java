@@ -255,7 +255,7 @@ public class SqlControl {
 	 * ²éÑ¯¹Ø¼ü×Ö
 	 * @return
 	 */
-	public <T> List<?> getFuzzyList(Class c, String property, String info) {
+	public List<?> getFuzzyList(Class c, String property, String info) {
 		if(!cache)
 			return start.getFuzzyList(c, property, info);
 		else
