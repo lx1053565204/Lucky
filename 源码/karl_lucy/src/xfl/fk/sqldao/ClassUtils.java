@@ -15,20 +15,18 @@ import xfl.fk.annotation.AnnotationCgf;
 @SuppressWarnings("all")
 public class ClassUtils {
 	private ClassInfo classInfo = null;
-	private AnnotationCgf cfg=null;
+	private AnnotationCgf cfg=AnnotationCgf.getAnnCfg(); 
 	private List<String> names;
 	private List<Object> values;
 	private TypeChange tych;
 	private LogInfo log;
-	private LuckyConfig lucy;
+	private LuckyConfig lucy=LuckyConfig.getConfig();
 
 	public ClassUtils() {
 		tych = new TypeChange();
 		names = new ArrayList<String>();
 		values = new ArrayList<Object>();
 		log = new LogInfo();
-		cfg=AnnotationCgf.getAnnCfg(); 
-		lucy=LuckyConfig.getConfig();
 		
 	}
 
@@ -40,7 +38,9 @@ public class ClassUtils {
 	 */
 	public <T> ClassInfo getClassInfo(T t) {
 		classInfo = new ClassInfo();
+		classInfo.setClzz(t.getClass());//获得传入对象的Class信息
 		String message = t.toString();
+		System.out.println(message);
 		if (message.contains("@"))
 			System.err.println("xflfk:未找到" + t.getClass().getName() + "类的toString()方法");
 		Class<? extends Object> c = t.getClass();
@@ -87,6 +87,7 @@ public class ClassUtils {
 				nameX.add(names.get(i));
 			}
 		}
+		cs1.setClzz(cs.getClzz());
 		cs1.setClassName(cs.getClassName());
 		cs1.setNames(nameX);
 		cs1.setValues(valueX);
@@ -107,7 +108,6 @@ public class ClassUtils {
 		ClassInfo cs2 = filter(cs);
 		Object[] valueY = new Object[cs2.getValues().size()];
 		cs2.getValues().toArray(valueY);
-		sqlInfo.setObj(valueY);
 		/// 根据属性与属性值拼接sql语句
 		if ("SELECT".equalsIgnoreCase(operation)) {
 			sql = "SELECT * FROM " + cs2.getClassName() + " WHERE 1=1 ";
@@ -136,28 +136,35 @@ public class ClassUtils {
 			sql = sql + sql2;
 		}
 		if ("UPDATE".equalsIgnoreCase(operation)) {
-			Object op = valueY[valueY.length - 1];
-			for (int i = 0; i < valueY.length; i++) {
-				if (i == 0) {
-					valueY[valueY.length - 1] = valueY[i];
-				} else {
-					if (i != valueY.length - 1)
-						valueY[i - 1] = valueY[i];
-					else
-						valueY[valueY.length - 2] = op;
+			IDAndLocation id_loca=new IDAndLocation(cs2);
+			//////如果ID的位置不再最后,则从ID的位置开始，依次将之后的元素向前移动一位，最后将ID放到最后
+			if(id_loca.getLocation()!=valueY.length-1) {
+				for(int i=id_loca.getLocation();i<valueY.length-1;i++) {
+					valueY[i]=valueY[i+1];
 				}
+				valueY[valueY.length-1]=id_loca.getId();
 			}
-			String sql2 = " WHERE " + cs2.getNames().get(0) + "=?";
+			String sql2 = " WHERE " + getID(cs2.getClzz()) + "=?";
 			sql = "UPDATE " + cs2.getClassName() + " SET ";
-			for (int i = 1; i < cs2.getNames().size(); i++) {
-				if (i != cs2.getNames().size() - 1)
-					sql = sql + cs2.getNames().get(i) + "=?,";
-				else
-					sql = sql + cs2.getNames().get(i) + "=?";
+			if( cs2.getNames().size()==(id_loca.getLocation()+1)) {
+				for (int i = 0; i < cs2.getNames().size()-1; i++) {
+					if ((i != cs2.getNames().size() - 2))
+						sql = sql + cs2.getNames().get(i) + "=?,";
+					else
+						sql = sql + cs2.getNames().get(i) + "=?";
+				}
+			}else {
+				for (int i = 0; i < cs2.getNames().size(); i++) {
+					if ((i != cs2.getNames().size() - 1)&&(i!=id_loca.getLocation()))
+						sql = sql + cs2.getNames().get(i) + "=?,";
+					else if((i!=id_loca.getLocation()))
+						sql = sql + cs2.getNames().get(i) + "=?";
+				}
 			}
 			sql = sql + sql2;
 		}
 		sqlInfo.setSql(sql);
+		sqlInfo.setObj(valueY);
 		return sqlInfo;
 	}
 
@@ -241,7 +248,7 @@ public class ClassUtils {
 	 * @param c
 	 * @return
 	 */
-	private String getID(Class c) {
+	public String getID(Class c) {
 		if(cfg.getId(c)!=null)
 			return cfg.getId(c);
 		else if(!"err".equals(lucy.nameToValueId(cfg.getTableName(c))))

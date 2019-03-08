@@ -8,9 +8,17 @@ import java.util.List;
  *
  */
 public class ClassInfo {
+	private Class<?> clzz;
 	private String className;
 	private List<String> names=new ArrayList<String>();
 	private List<Object> values=new ArrayList<Object>();
+	
+	public Class<?> getClzz() {
+		return clzz;
+	}
+	public void setClzz(Class<?> clzz) {
+		this.clzz = clzz;
+	}
 	public String getClassName() {
 		return className;
 	}
