@@ -13,6 +13,7 @@ import java.sql.SQLException;
  *
  */
 public class JdbcUtils {
+	private static Connection conn=null;
 	static {
 		try {
 			Class.forName(LuckyConfig.getConfig().nameToValue("jdbc.driver"));
@@ -24,9 +25,12 @@ public class JdbcUtils {
 
 	public static Connection getConnection() {
 		try {
-			return DriverManager.getConnection(LuckyConfig.getConfig().nameToValue("jdbc.url"),
-					LuckyConfig.getConfig().nameToValue("jdbc.username"),
-					LuckyConfig.getConfig().nameToValue("jdbc.password"));
+			if(conn==null) {
+				conn=DriverManager.getConnection(LuckyConfig.getConfig().nameToValue("jdbc.url"),
+						LuckyConfig.getConfig().nameToValue("jdbc.username"),
+						LuckyConfig.getConfig().nameToValue("jdbc.password"));
+			}
+			return conn;
 		} catch (SQLException e) {
 			System.err.println("xflfk：数据库路径错误或数据库用户名密码错误！");
 			e.printStackTrace();

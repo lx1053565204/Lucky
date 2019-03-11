@@ -40,7 +40,6 @@ public class ClassUtils {
 		classInfo = new ClassInfo();
 		classInfo.setClzz(t.getClass());//获得传入对象的Class信息
 		String message = t.toString();
-		System.out.println(message);
 		if (message.contains("@"))
 			System.err.println("xflfk:未找到" + t.getClass().getName() + "类的toString()方法");
 		Class<? extends Object> c = t.getClass();
@@ -244,7 +243,7 @@ public class ClassUtils {
 		return sqlInfo;
 	}
 	/**
-	 * 找到Classd对应的ID
+	 * 找到Class对应的ID
 	 * @param c
 	 * @return
 	 */
