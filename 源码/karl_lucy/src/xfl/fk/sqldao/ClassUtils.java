@@ -182,7 +182,7 @@ public class ClassUtils {
 		ClassInfo cs2 = filter(cs);
 		Object[] valueY = new Object[cs2.getValues().size()];
 		cs2.getValues().toArray(valueY);
-		String sql = "SELECT * FROM " + cs2.getClassName() + " WHERE 1=1";
+		String sql = "SELECT * FROM " + cs2.getClassName() + " WHERE 1=1 ";
 		String sql2 = " LIMIT " + index + "," + size;
 		for (int i = 0; i < cs2.getNames().size(); i++) {
 			sql = sql + "AND " + cs2.getNames().get(i) + "=? ";
