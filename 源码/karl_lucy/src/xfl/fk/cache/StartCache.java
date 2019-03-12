@@ -6,12 +6,14 @@ import xfl.fk.annotation.AnnotationCgf;
 import xfl.fk.sqldao.AutoPackage;
 import xfl.fk.sqldao.ClassUtils;
 import xfl.fk.sqldao.LuckyConfig;
+import xfl.fk.sqldao.PropAnnotCombination;
 import xfl.fk.sqldao.SqlInfo;
 import xfl.fk.sqldao.SqlOperation;
 
 @SuppressWarnings("all")
 public class StartCache {
 	private List<?> list = null;
+	private PropAnnotCombination pac=new PropAnnotCombination();
 	private SqlOperation sqlOperation = new SqlOperation();
 	private boolean isOk = false;
 	private LuckyCache lucy = LuckyCache.getLuckyCache();
@@ -21,16 +23,15 @@ public class StartCache {
 	private AnnotationCgf cfg=AnnotationCgf.getAnnCfg();
 
 	/**
-	 * 启用缓存机制的ID查询(配置方式)
+	 * 启用缓存机制的ID查询
 	 * @param c
 	 * 包装类的Class
 	 * @param id
 	 * @return
 	 */
-	@Deprecated
 	public Object getOneCache(Class c, int id) {
 		Object object = null;
-		String id_ = LuckyConfig.getConfig().nameToValueId(cfg.getTableName(c));
+		String id_ = pac.tableID(c);
 		String sql = "SELECT * FROM " + cfg.getTableName(c) + " WHERE " + id_ + "=?";
 		if (lucy.get(createSql.getSqlString(sql, id)) == null) {
 			list = autopackage.getTable(c, sql, id);
@@ -43,29 +44,6 @@ public class StartCache {
 		return object;
 	}
 	
-	/**
-	 * 启用缓存的ID查询(注解方式)
-	 * 
-	 * @param c
-	 *            包装类的Class
-	 * @param id
-	 *            主键id
-	 * @return
-	 */
-	public Object getoneCache(Class c, int id) {
-		Object object = null;
-		String id_ = AnnotationCgf.getAnnCfg().getId(c);
-		String sql = "SELECT * FROM " + cfg.getTableName(c) + " WHERE " + id_ + "=?";
-		if (lucy.get(createSql.getSqlString(sql, id)) == null) {
-			list = autopackage.getTable(c, sql, id);
-			lucy.add(createSql.getSqlString(sql, id), list);
-		} else {
-			list = lucy.get(createSql.getSqlString(sql, id));
-		}
-		if (!(list == null || list.size() == 0))
-			object = list.get(0);
-		return object;
-	}
 
 	/**
 	 * 启用缓存的预编译Sql查询
@@ -281,35 +259,17 @@ public class StartCache {
 
 
 	/**
-	 * ID查询(配置方式)
+	 * ID查询
 	 * @param c
 	 * 包装类的Class
 	 * @param id
 	 * @return
 	 */
-	@Deprecated
 	public Object getOne(Class c, int id) {
 		Object object = null;
-		String id_ = LuckyConfig.getConfig().nameToValueId(cfg.getTableName(c));
+		String id_ =pac.tableID(c);
 		String sql = "SELECT * FROM " + cfg.getTableName(c) + " WHERE " + id_ + "=?";
 			list = autopackage.getTable(c, sql, id);
-		if (!(list == null || list.size() == 0))
-			object = list.get(0);
-		return object;
-	}
-	/**
-	 * ID查询(注解方式)
-	 * @param c
-	 * 包装类的Class
-	 * @param id
-	 * 主键id
-	 * @return
-	 */
-	public Object getone(Class c, int id) {
-		Object object = null;
-		String id_ = AnnotationCgf.getAnnCfg().getId(c);
-		String sql = "SELECT * FROM " + cfg.getTableName(c)+ " WHERE " + id_ + "=?";
-		list = autopackage.getTable(c, sql, id);
 		if (!(list == null || list.size() == 0))
 			object = list.get(0);
 		return object;

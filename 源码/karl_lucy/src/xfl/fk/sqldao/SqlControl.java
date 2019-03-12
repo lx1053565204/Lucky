@@ -58,13 +58,12 @@ public class SqlControl {
 	}
 
 	/**
-	 * ID查询(配置方式)
+	 * ID查询
 	 * @param c
 	 * 包装类的Class
 	 * @param id
 	 * @return
 	 */
-	@Deprecated
 	public Object getOne(Class c, int id) {
 		if(!cache)
 			return start.getOne(c, id);
@@ -87,20 +86,6 @@ public class SqlControl {
 			return start.deleteCache(c, id);
 	}
 
-	/**
-	 * ID查询(注解方式)
-	 * @param c
-	 * 包装类的Class
-	 * @param id
-	 * 主键id
-	 * @return
-	 */
-	public Object getone(Class c, int id) {
-		if(!cache)
-			return start.getone(c, id);
-		else
-			return start.getoneCache(c, id);
-	}
 
 	/**
 	 * 

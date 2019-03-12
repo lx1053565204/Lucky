@@ -2,7 +2,6 @@ package xfl.fk.sqldao;
 
 import java.util.ResourceBundle;
 
-import xfl.fk.table.TableNum;
 
 /**
  * 读取配置文件的类(DL)
@@ -63,22 +62,6 @@ public class LuckyConfig {
 		}catch(Exception e){
 			return "35";
 		}
-	}
-	/**
-	 * 返回数据由库名和其中表的张数所组成的对象
-	 * @return
-	 */
-	public TableNum getTableNum() {
-		SqlControl sq = new SqlControl();
-		TableNum tn = new TableNum();
-		String sql = nameToValue("jdbc.url");
-		int state = sql.lastIndexOf("/")+1;
-		int end = sql.length();
-		tn = (TableNum) sq.getList(TableNum.class,
-				"SELECT COUNT(*) tables, table_schema FROM information_schema.TABLES   WHERE table_schema =?;",
-				sql.substring(state, end)).get(0);
-		tn.setTable_schema(sql.substring(state, end));
-		return tn;
 	}
 
 }
