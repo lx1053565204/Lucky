@@ -18,7 +18,9 @@ import xfl.fk.table.CreateTable;
  */
 @SuppressWarnings("all")
 public class SqlControl {
-	private SqlOperation sqlOperation = new SqlOperation();
+	private static SqlControl sqlcontrol1=null;
+	private static SqlControl sqlcontrol2=null;
+	private SqlOperation sqlOperation =SqlOperation.getSqlOperation();
 	private LuckyConfig lucycfg=LuckyConfig.getConfig();
 	private StartCache start=new StartCache();
 	private boolean cache="true".equals(lucycfg.nameToValue("Cache"));
@@ -26,8 +28,7 @@ public class SqlControl {
 	/**
 	 * 无参构造(不负责建表)
 	 */
-	public SqlControl() {
-	};
+	private SqlControl() {};
 
 	/**
 	 * 有参构造(自动生成MySQL表)
@@ -36,9 +37,29 @@ public class SqlControl {
 	 * @param last
 	 *  配置文件中Class.Url的最后一个标号
 	 */
-	public SqlControl(int first, int last) {
+	private SqlControl(int first, int last) {
 		CreateTable ct = new CreateTable();
 		ct.creatTable(first, last);
+	}
+	/**
+	 * 无参工厂(不负责建表)
+	 */
+	public static SqlControl getSqlControl() {
+		if(sqlcontrol1==null)
+			sqlcontrol1=new SqlControl();
+		return sqlcontrol1;
+	}
+	/**
+	 * 有参工厂(自动生成MySQL表)
+	 * @param first
+	 * 配置文件中Class.Url的第一个标号
+	 * @param last
+	 *  配置文件中Class.Url的最后一个标号
+	 */
+	public static SqlControl getSqlControl(int fist,int last) {
+		if(sqlcontrol2==null)
+			sqlcontrol2=new SqlControl(fist,last);
+		return sqlcontrol2;
 	}
 
 	/**

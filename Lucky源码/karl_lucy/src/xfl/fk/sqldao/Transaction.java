@@ -17,8 +17,9 @@ public class Transaction {
 	}
 	/**
 	 * 提交事务
+	 * @throws SQLException 
 	 */
-	public void commit(){
+	public void commit() {
 		try {
 			conn.commit();
 		} catch (SQLException e) {
@@ -28,8 +29,9 @@ public class Transaction {
 	}
 	/**
 	 * 事务回滚
+	 * @throws SQLException 
 	 */
-	public void rollback(){
+	public void rollback() {
 		try {
 			conn.rollback();
 		} catch (SQLException e) {

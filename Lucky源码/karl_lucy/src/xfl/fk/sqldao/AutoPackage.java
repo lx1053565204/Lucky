@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class AutoPackage {
 	private ResultSet rs=null;
-	private SqlOperation sqloperation=new SqlOperation();
+	private SqlOperation sqloperation=SqlOperation.getSqlOperation();
 
 	/**
 	 * 自动将结果集中的内容封装起来

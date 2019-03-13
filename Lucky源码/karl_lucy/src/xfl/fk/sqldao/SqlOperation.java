@@ -10,6 +10,7 @@ import java.sql.SQLException;
  *
  */
 public class SqlOperation {
+	private static SqlOperation sqloper=null;
 	private Connection conn = null;
 	private PreparedStatement ps = null;
 	private LogInfo log=null;
@@ -24,9 +25,14 @@ public class SqlOperation {
 		this.conn = conn;
 	}
 	
-	public SqlOperation() {
+	private SqlOperation() {
 		conn=JdbcUtils.getConnection();
 		log=new LogInfo();
+	}
+	public static SqlOperation getSqlOperation() {
+		if(sqloper==null)
+			sqloper=new SqlOperation();
+		return sqloper;
 	}
 	/**
 	 * 实现对表的曾刪改操作

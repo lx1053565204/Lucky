@@ -9,7 +9,7 @@ import xfl.fk.sqldao.LuckyConfig;
 import xfl.fk.sqldao.SqlOperation;
 
 public class DeleteKeySql {
-	private SqlOperation sqlop=new SqlOperation();
+	private SqlOperation sqlop=SqlOperation.getSqlOperation();
 	private String databasename;
 	private List<String> delkeysql=new ArrayList<String>();
 	public String getDatabasename() {

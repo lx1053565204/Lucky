@@ -14,7 +14,7 @@ import xfl.fk.sqldao.SqlOperation;
 public class StartCache {
 	private List<?> list = null;
 	private PropAnnotCombination pac=new PropAnnotCombination();
-	private SqlOperation sqlOperation = new SqlOperation();
+	private SqlOperation sqlOperation =SqlOperation.getSqlOperation();
 	private boolean isOk = false;
 	private LuckyCache lucy = LuckyCache.getLuckyCache();
 	private AutoPackage autopackage = new AutoPackage();

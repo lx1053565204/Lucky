@@ -31,7 +31,6 @@ public class IDAndLocation {
 			if (util.getID(info.getClzz()).equals(info.getNames().get(i))) {
 				this.id = info.getValues().get(i);
 				this.location = i;
-				System.out.println(id+"::"+location);
 			}
 		}
 		if (this.id == null) {

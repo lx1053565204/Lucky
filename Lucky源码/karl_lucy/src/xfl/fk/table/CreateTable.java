@@ -6,7 +6,7 @@ import xfl.fk.sqldao.LuckyConfig;
 import xfl.fk.sqldao.SqlOperation;
 
 public class CreateTable {
-	private SqlOperation sqlop = new SqlOperation();
+	private SqlOperation sqlop = SqlOperation.getSqlOperation();
 	
 
 	public void creatTable(int first, int last) {
