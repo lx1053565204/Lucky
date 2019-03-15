@@ -1,10 +1,9 @@
 package com.fk.test;
-import java.sql.SQLException;
 import java.util.List;
 
 import org.junit.Test;
 
-import com.fk.entitry.Admin;
+import com.fk.entitry.Account;
 import com.fk.entitry.Author;
 import com.fk.entitry.Book;
 import com.fk.entitry.Stort;
@@ -123,23 +122,25 @@ public class LuckyTest {
 		List<Book> list=(List<Book>)sql.getList(Book.class, "SELECT * FROM t_book WHERE stid=?", 1);//查询类型1下的所有书本
 		System.out.println(list);
 	}
+	//Lucky的事务处理机制
 	@Test
 	public void test14() {
 		SqlControl sql=SqlControl.getSqlControl();
-		Transaction tx=sql.openTransaction();
-		Admin a1=(Admin) sql.getOne(Admin.class, 1);
-		Admin a2=(Admin) sql.getOne(Admin.class, 2);
-		a1.setPassword("111111");
-		a2.setPassword("a2a2a2");
+		Transaction tx=sql.openTransaction();//开启事务
+		Account zs=(Account) sql.getOne(Account.class, 1);//获得张三的账户信息
+		Account ls=(Account) sql.getOne(Account.class, 2);//获得李四的账户信息
+		zs.setMoney(zs.getMoney()-1000);//张三余额减少1000
+		ls.setMoney(ls.getMoney()+1000);//李四余额增加1000
 		try {
-			sql.update(a1);
-			sql.update(a2);
-			sql.delete(new Admin());
-//			int i=1/0;
-			tx.commit();
+//			tx=sql.openTransaction();//开启事务
+			//执行更改
+			sql.update(zs);
+			int i=1/0;//这里会产生异常，我们用这个异常代替例子中的网络故障
+			sql.update(ls);
+			tx.commit();//提交事务
 		}catch(Exception e) {
 			e.printStackTrace();
-			tx.rollback();
+			tx.rollback();//出现异常就回滚
 		}
 	}
 }
