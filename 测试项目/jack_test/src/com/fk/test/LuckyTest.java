@@ -3,10 +3,10 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.fk.entitry.Account;
-import com.fk.entitry.Author;
-import com.fk.entitry.Book;
-import com.fk.entitry.Stort;
+import com.fk.entitry3.Account;
+import com.fk.entitry3.Author;
+import com.fk.entitry3.Book;
+import com.fk.entitry3.Stort;
 
 import xfl.fk.sqldao.SqlControl;
 import xfl.fk.sqldao.Transaction;
@@ -17,7 +17,7 @@ public class LuckyTest {
 	@Test
 	//有参构造建表
 	public void test1() {
-		 SqlControl sql=SqlControl.getSqlControl(1, 5);
+		 SqlControl sql=SqlControl.getSqlControlAddCTable(1, 6);
 	}
 	@Test
 	//ID操作-删除
@@ -29,7 +29,7 @@ public class LuckyTest {
 	//ID操作-查询
 	public void test3() {
 		 SqlControl sql=SqlControl.getSqlControl();
-		 Stort st=(Stort) sql.getOne(Stort.class, 2);
+		 Stort st=(Stort) sql.getOne(Stort.class, 7);
 		 System.out.println(st);
 	}
 	@Test
@@ -142,5 +142,32 @@ public class LuckyTest {
 			e.printStackTrace();
 			tx.rollback();//出现异常就回滚
 		}
+	}
+	//Lucky的逆向工程
+	@Test
+	public void test15() {
+		SqlControl sql=SqlControl.getSqlControlAddCJavaBean("C:/Users/chenjun/Desktop/Lucky/Lucky/测试项目/jack_test/src");
+	}
+	//Lucky批量操作
+	@Test
+	public void test16() {
+		SqlControl sql=SqlControl.getSqlControl();
+		/*预编译SQL批量添加（删除和修改类似，不做赘述）
+		Object[][] obj= {{"鲁迅","男"},{"冰心","女"},{"余华","男"},{"三毛","女"}};
+		sql.saveBatch("INSERT INTO t_author(autname,autsex) VALUES(?,?)", obj);
+		*/
+		/*对象方式的批量操作（删除和修改类似，不做赘述）
+		Stort s1=new Stort(null,"网络小说");
+		Stort s2=new Stort(null,"文学名著");
+		Stort s3=new Stort(null,"恐怖悬疑");
+		Author a1=new Author(null,"余华","男");
+		Author a2=new Author(null,"鲁迅","男");
+		Author a3=new Author(null,"三毛","女");
+		Book b1=new Book(null,"《骆驼祥子》",34.5,1,2);
+		Book b2=new Book(null,"《活着》",44.4,2,1);
+		Book b3=new Book(null,"《花落知多少》",55.5,3,3);
+		Book b4=new Book(null,"《朝花夕拾》",66.6,3,2);
+		sql.saveBatch(s1,s2,s3,a1,a2,a3,b1,b2,b3,b4);//批量向不同的表中添加多条纪录
+		*/
 	}
 }
