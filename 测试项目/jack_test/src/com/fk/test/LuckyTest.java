@@ -17,13 +17,25 @@ public class LuckyTest {
 	@Test
 	//有参构造建表
 	public void test1() {
-		 SqlControl sql=SqlControl.getSqlControlAddCTable(1, 6);
+		 SqlControl sql=SqlControl.getSqlControlAddCTable(1, 4);
 	}
 	@Test
 	//ID操作-删除
 	public void test2() {
+		//1.获得操作数据库的SqlControl对象
 		 SqlControl sql=SqlControl.getSqlControl();
-		 sql.delete(Book.class,5);
+		//2.封装操作信息
+		//方式1.ID操作
+		 sql.delete(Book.class, 1);//删除book表中主键为 1 的那条记录
+		 Book b1=(Book) sql.getOne(Book.class, 1);//查询book表中主键为 1 的那条记录
+		 //方式2.对象操作
+		 Book book=new Book();
+		 book.setBname("朝花夕拾");
+		 book.setPrice(43.0);
+		 sql.save(book);//添加一本价格为43元书名为‘朝花夕拾’的书
+		 //方式3.预编译SQL操作
+		 String sqlsrt="UPDATE book SET price=? WHERE bid=?";
+		 sql.update(sqlsrt, 34.7,3);//将书本ID为3的那本书的价格改为34.7
 	}
 	@Test
 	//ID操作-查询
@@ -108,7 +120,7 @@ public class LuckyTest {
 	public void test12() {
 		SqlControl sql=SqlControl.getSqlControl();
 		String sql1;
-		sql1="INSERT INTO t_stort(stname) VALUES(?)";
+		sql1="INSERT INTO stort(stname) VALUES(?)";
 		sql.save(sql1, "国学经典");//增加
 //		sql2="DELETE FROM t_book WHERE bname=?";
 //		sql.delete(sql2, "888");//删除
