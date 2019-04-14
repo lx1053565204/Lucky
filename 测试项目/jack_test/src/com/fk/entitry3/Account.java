@@ -6,7 +6,7 @@ import java.util.*;
 import xfl.fk.annotation.Lucky;
 
 @SuppressWarnings("all")
-@Lucky(id="accid")
+@Lucky(id="accid",auto=false)
 public class Account{
 	private String accid;
 	private String name;

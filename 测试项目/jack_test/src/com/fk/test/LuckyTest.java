@@ -7,6 +7,7 @@ import com.fk.entitry3.Account;
 import com.fk.entitry3.Author;
 import com.fk.entitry3.Book;
 import com.fk.entitry3.Stort;
+import com.fk.entitry3.User;
 
 import xfl.fk.sqldao.SqlControl;
 import xfl.fk.sqldao.Transaction;
@@ -17,31 +18,19 @@ public class LuckyTest {
 	@Test
 	//有参构造建表
 	public void test1() {
-		 SqlControl sql=SqlControl.getSqlControlAddCTable(1, 4);
+		 SqlControl sql=SqlControl.getSqlControlAddCTable(1, 6);
 	}
 	@Test
 	//ID操作-删除
 	public void test2() {
-		//1.获得操作数据库的SqlControl对象
 		 SqlControl sql=SqlControl.getSqlControl();
-		//2.封装操作信息
-		//方式1.ID操作
-		 sql.delete(Book.class, 1);//删除book表中主键为 1 的那条记录
-		 Book b1=(Book) sql.getOne(Book.class, 1);//查询book表中主键为 1 的那条记录
-		 //方式2.对象操作
-		 Book book=new Book();
-		 book.setBname("朝花夕拾");
-		 book.setPrice(43.0);
-		 sql.save(book);//添加一本价格为43元书名为‘朝花夕拾’的书
-		 //方式3.预编译SQL操作
-		 String sqlsrt="UPDATE book SET price=? WHERE bid=?";
-		 sql.update(sqlsrt, 34.7,3);//将书本ID为3的那本书的价格改为34.7
+		 sql.delete(Book.class, "book1");//删除book表中主键为 “book1” 的那条记录
 	}
 	@Test
 	//ID操作-查询
 	public void test3() {
 		 SqlControl sql=SqlControl.getSqlControl();
-		 Stort st=(Stort) sql.getOne(Stort.class, 7);
+		 Book st=(Book) sql.getOne(Book.class, "book2");
 		 System.out.println(st);
 	}
 	@Test
@@ -181,5 +170,18 @@ public class LuckyTest {
 		Book b4=new Book(null,"《朝花夕拾》",66.6,3,2);
 		sql.saveBatch(s1,s2,s3,a1,a2,a3,b1,b2,b3,b4);//批量向不同的表中添加多条纪录
 		*/
+	}
+	//缓存模式
+	@Test
+	public void test17() {
+		SqlControl sql=SqlControl.getSqlControl();
+		long start=System.currentTimeMillis();
+		for(int i=0;i<3000;i++) {
+			User u=(User) sql.getOne(User.class, 2);
+			System.out.println(u);
+		}
+		long end=System.currentTimeMillis();
+		System.out.println(end-start);
+		
 	}
 }

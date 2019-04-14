@@ -6,9 +6,9 @@ import java.util.*;
 import xfl.fk.annotation.Lucky;
 
 @SuppressWarnings("all")
-@Lucky(id="bid")
+@Lucky(id="bid",table="t_book",auto=false,key= {"stid","autid"},url= {"com.fk.entitry3.Stort","com.fk.entitry3.Author"})
 public class Book{
-	private Integer bid;
+	private String bid;
 	private String bname;
 	private Double price;
 	private Integer stid;
@@ -16,7 +16,7 @@ public class Book{
 
 	public Book(){}
 
-	public Book(Integer bid, String bname, Double price, Integer stid, Integer autid){
+	public Book(String bid, String bname, Double price, Integer stid, Integer autid){
 		this.bid=bid;
 		this.bname=bname;
 		this.price=price;
@@ -24,10 +24,10 @@ public class Book{
 		this.autid=autid;
 	}
 
-	public Integer getBid(){
+	public String getBid(){
 		return this.bid;
 	}
-	public void setBid(Integer bid){
+	public void setBid(String bid){
 		this.bid=bid;
 	}
 
